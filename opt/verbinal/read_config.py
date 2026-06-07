@@ -32,9 +32,9 @@ import sys
 # Defaults (also the documented behaviour when no config file is present).
 DEFAULTS = {
     "poll_interval_ms": 1000,
-    "output_cap_bytes": 262144,        # 256 KiB; client hard cap is 1 MiB
+    "output_cap_bytes": 262144,  # 256 KiB; client hard cap is 1 MiB
     "timeout_ceiling_seconds": 900,
-    "mem_percent": 75,                 # cap address space at this % of session RAM
+    "mem_percent": 75,  # cap address space at this % of session RAM
 }
 
 # Clamp ranges keep a hostile/typo'd config from producing degenerate settings.
@@ -77,20 +77,23 @@ def main():
     elif not os.path.isabs(exec_dir):
         exec_dir = os.path.join(user_home, exec_dir)
 
-    poll_ms = clamp("poll_interval_ms",
-                    as_int(cfg.get("poll_interval_ms"), DEFAULTS["poll_interval_ms"]))
-    output_cap = clamp("output_cap_bytes",
-                       as_int(cfg.get("output_cap_bytes"), DEFAULTS["output_cap_bytes"]))
-    timeout_ceil = clamp("timeout_ceiling_seconds",
-                         as_int(cfg.get("timeout_ceiling_seconds"),
-                                DEFAULTS["timeout_ceiling_seconds"]))
+    poll_ms = clamp(
+        "poll_interval_ms", as_int(cfg.get("poll_interval_ms"), DEFAULTS["poll_interval_ms"])
+    )
+    output_cap = clamp(
+        "output_cap_bytes", as_int(cfg.get("output_cap_bytes"), DEFAULTS["output_cap_bytes"])
+    )
+    timeout_ceil = clamp(
+        "timeout_ceiling_seconds",
+        as_int(cfg.get("timeout_ceiling_seconds"), DEFAULTS["timeout_ceiling_seconds"]),
+    )
 
     # mem_fraction is a float in (0,1]; convert to an integer percent.
     frac = cfg.get("mem_fraction")
     if isinstance(frac, bool) or not isinstance(frac, (int, float)):
         mem_percent = DEFAULTS["mem_percent"]
     else:
-        mem_percent = clamp("mem_percent", int(round(frac * 100)))
+        mem_percent = clamp("mem_percent", round(frac * 100))
 
     out = {
         "VERBINAL_EXEC_DIR": exec_dir,
@@ -100,7 +103,7 @@ def main():
         "VERBINAL_MEM_PERCENT": str(mem_percent),
     }
     for k, v in out.items():
-        sys.stdout.write("export %s=%s\n" % (k, shlex.quote(v)))
+        sys.stdout.write(f"export {k}={shlex.quote(v)}\n")
 
 
 if __name__ == "__main__":

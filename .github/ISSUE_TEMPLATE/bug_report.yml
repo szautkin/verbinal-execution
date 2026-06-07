@@ -1,0 +1,35 @@
+name: Bug report
+description: Report something that isn't working as documented.
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you observe, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Ideally the request JSON you dropped and the result/status you got back.
+      placeholder: |
+        1. Built image at <tag/commit>
+        2. Dropped this request into the inbox: { "id": "...", "language": "python", "code": "..." }
+        3. Got this result / status.json / :5000 output: ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Image tag or commit
+      placeholder: "e.g. 0.0.1 or git sha"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Watcher/session log lines. Redact anything sensitive.
+      render: shell

@@ -4,6 +4,22 @@ All notable changes to this project are documented here. The format is loosely
 based on [Keep a Changelog](https://keepachangelog.com/), and the project aims
 to follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Linting and formatting: Ruff (config in `pyproject.toml`), ShellCheck for the
+  shell scripts, Hadolint for the Dockerfile (`.hadolint.yaml`), and actionlint
+  for the workflows.
+- CI `lint` job running all of the above on every push/PR, alongside the
+  existing Docker build-and-test job.
+- `.pre-commit-config.yaml` mirroring the CI lint job, plus `.editorconfig`.
+- Open-source project scaffolding: `CODE_OF_CONDUCT.md`, issue and pull-request
+  templates, and a Dependabot config for GitHub Actions / Docker / pip.
+
+### Changed
+- Applied Ruff lint/format fixes to the `opt/verbinal/` helpers (f-strings,
+  `datetime.UTC`, import sorting, `contextlib.suppress`) with no behavior change.
+
 ## [0.0.1] - 2026-06-02
 
 Initial release.
@@ -31,4 +47,5 @@ Initial release.
 - Test suites: `checklist.sh` (37), `integration.sh` (14), `imports.sh` (19),
   and a GitHub Actions workflow that builds the image and runs all three.
 
-[0.0.1]: https://github.com/verbinal/verbinal-execution/releases/tag/0.0.1
+[Unreleased]: https://github.com/szautkin/verbinal-execution/compare/0.0.1...HEAD
+[0.0.1]: https://github.com/szautkin/verbinal-execution/releases/tag/0.0.1

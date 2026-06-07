@@ -1,0 +1,35 @@
+# Optional local pre-commit hooks mirroring the CI lint job.
+#   pip install pre-commit && pre-commit install
+#   pre-commit run --all-files
+# Keep the revs in sync with .github/workflows/ci.yml (run `pre-commit autoupdate`).
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.16
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        args: [-s, bash]
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.14.0
+    hooks:
+      - id: hadolint-docker
+        files: ^Dockerfile$
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: check-executables-have-shebangs
+      - id: mixed-line-ending
+        args: [--fix=lf]

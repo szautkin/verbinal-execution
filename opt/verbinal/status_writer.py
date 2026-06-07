@@ -28,7 +28,7 @@ def main():
     p.add_argument("--user", default="")
     p.add_argument("--started", default="")
     p.add_argument("--heartbeat", default="")
-    p.add_argument("--state", default="idle")        # idle | processing | exiting
+    p.add_argument("--state", default="idle")  # idle | processing | exiting
     p.add_argument("--processed", type=int, default=0)
     # current request (only while state == processing)
     p.add_argument("--current-id", default="")

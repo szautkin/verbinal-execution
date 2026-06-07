@@ -6,6 +6,11 @@
 #   docker run --rm --entrypoint bash <image> /src/test/imports.sh   # with /src mounted
 # or simply run it inside the image where it ships.
 
+# The smoke test uses `python3 - <<PY && echo OK || { ...; FAIL++; }`: the C
+# branch is the intended failure handler, so SC2015's "not if-then-else" caveat
+# does not apply. Silence it file-wide.
+# shellcheck disable=SC2015
+
 set -u
 PKGS="numpy scipy pandas matplotlib astropy astroquery photutils specutils reproject regions fitsio h5py sklearn skimage yaml requests tqdm IPython canfar"
 PASS=0; FAIL=0

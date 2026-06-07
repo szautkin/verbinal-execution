@@ -10,6 +10,11 @@
 # (a published image's ENTRYPOINT is already /skaha/startup.sh; here we invoke
 # it explicitly so we can drive and assert against it).
 
+# The `cond && ok "..." || bad "..."` assertion idiom is used throughout. `ok`
+# always succeeds, so the `|| bad` branch only runs when the condition fails --
+# the SC2015 "not if-then-else" caveat does not apply here. Silence it file-wide.
+# shellcheck disable=SC2015
+
 set -u
 
 WORK="$(mktemp -d)"

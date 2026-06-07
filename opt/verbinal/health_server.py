@@ -57,7 +57,7 @@ def read_status():
     if not STATUS_PATH:
         return None
     try:
-        with open(STATUS_PATH, "r", encoding="utf-8") as f:
+        with open(STATUS_PATH, encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return None
@@ -68,11 +68,10 @@ def heartbeat_fresh(status):
     if not isinstance(hb, str):
         return False
     try:
-        ts = datetime.datetime.strptime(hb, "%Y-%m-%dT%H:%M:%SZ").replace(
-            tzinfo=datetime.timezone.utc)
+        ts = datetime.datetime.strptime(hb, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.UTC)
     except ValueError:
         return False
-    age = (datetime.datetime.now(datetime.timezone.utc) - ts).total_seconds()
+    age = (datetime.datetime.now(datetime.UTC) - ts).total_seconds()
     return age <= STALE_AFTER_SEC
 
 
@@ -83,22 +82,24 @@ class Handler(BaseHTTPRequestHandler):
         ready = have and heartbeat_fresh(status)
         # Lift the live activity fields to the top level for convenience; keep
         # the full watcher status nested for anything not surfaced here.
-        body = json.dumps({
-            "service": "verbinal-compute",
-            "ready": ready,
-            "state": status.get("state") if have else "down",
-            "processed_count": status.get("processed_count"),
-            "current": status.get("current"),
-            "last_request": status.get("last_request"),
-            "last_error": status.get("last_error"),
-            "heartbeat_at": status.get("heartbeat_at"),
-            "started_at": status.get("started_at"),
-            # Capability discovery: what agent code can import (static, cached).
-            "python_version": PYTHON_VERSION,
-            "package_count": PACKAGE_COUNT,
-            "packages": INSTALLED_PACKAGES,
-            "watcher_status": status or None,
-        }).encode("utf-8")
+        body = json.dumps(
+            {
+                "service": "verbinal-compute",
+                "ready": ready,
+                "state": status.get("state") if have else "down",
+                "processed_count": status.get("processed_count"),
+                "current": status.get("current"),
+                "last_request": status.get("last_request"),
+                "last_error": status.get("last_error"),
+                "heartbeat_at": status.get("heartbeat_at"),
+                "started_at": status.get("started_at"),
+                # Capability discovery: what agent code can import (static, cached).
+                "python_version": PYTHON_VERSION,
+                "package_count": PACKAGE_COUNT,
+                "packages": INSTALLED_PACKAGES,
+                "watcher_status": status or None,
+            }
+        ).encode("utf-8")
         # 200 keeps the session alive; 503 signals not-yet-ready to probes.
         self.send_response(200 if ready or not have else 503)
         self.send_header("Content-Type", "application/json")

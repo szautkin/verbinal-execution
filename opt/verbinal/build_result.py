@@ -11,6 +11,7 @@ os.replace() to <out-final> (atomic rename on POSIX / cavern).
 
 import argparse
 import base64
+import contextlib
 import json
 import os
 import sys
@@ -50,7 +51,7 @@ def read_capped(path, cap):
             i = 0
             while i < len(tail) and 0x80 <= tail[i] <= 0xBF:
                 i += 1
-            text = "...[truncated %d bytes]...\n" % dropped
+            text = f"...[truncated {dropped} bytes]...\n"
             text += tail[i:].decode("utf-8", errors="replace")
         else:
             text = data.decode("utf-8")
@@ -81,7 +82,7 @@ def main():
     rid = a.id_literal or ""
     if a.id_file and os.path.exists(a.id_file):
         try:
-            with open(a.id_file, "r", encoding="utf-8", errors="replace") as f:
+            with open(a.id_file, encoding="utf-8", errors="replace") as f:
                 rid = f.read()
         except OSError:
             pass
@@ -112,10 +113,8 @@ def main():
     # Never publish a 0-byte temp (2.5).
     if os.path.getsize(a.out_partial) == 0:
         sys.stderr.write("refusing to publish 0-byte result\n")
-        try:
+        with contextlib.suppress(OSError):
             os.unlink(a.out_partial)
-        except OSError:
-            pass
         sys.exit(1)
 
     os.replace(a.out_partial, a.out_final)

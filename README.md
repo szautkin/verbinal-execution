@@ -1,5 +1,9 @@
 # verbinal-compute
 
+[![ci](https://github.com/szautkin/verbinal-execution/actions/workflows/ci.yml/badge.svg)](https://github.com/szautkin/verbinal-execution/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![code style: ruff](https://img.shields.io/badge/code%20style-ruff-261230.svg)](https://github.com/astral-sh/ruff)
+
 A CANFAR/Skaha **contributed** interactive session image whose baked-in
 entrypoint is a long-lived watcher. The watcher polls a directory under the
 launching user's `/arc` home, executes short Python/bash snippets that an

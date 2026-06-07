@@ -101,7 +101,9 @@ now_s()   { date +%s; }
 # double-quote -- the only metacharacters plausible in a home path or username).
 json_escape() { local s=$1; s=${s//\\/\\\\}; s=${s//\"/\\\"}; printf '%s' "$s"; }
 
-# 2.2: sanitize an id before any path use.
+# 2.2: sanitize an id before any path use. The set includes a literal backslash
+# (the '\\' is a backslash inside a single-quoted string, not a quote escape).
+# shellcheck disable=SC1003
 sanitize() { printf '%s' "$1" | tr '/:?*<>|"\\' '_'; }
 
 # Pick a writable ephemeral base for per-request scratch dirs (3.5).

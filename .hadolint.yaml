@@ -1,0 +1,15 @@
+# Hadolint config for the verbinal-execution Dockerfile.
+# Fail CI on warnings and errors; info/style findings are advisory only.
+failure-threshold: warning
+
+ignored:
+  # apt package versions are intentionally unpinned: this is a slim science
+  # base rebuilt against current Debian security updates, not a reproducible
+  # lockfile. Pinning every apt version here is brittle and offers little.
+  - DL3008
+  # Python deps are version-constrained in requirements.txt; the pip/wheel/
+  # setuptools bootstrap in the builder stage intentionally tracks latest.
+  - DL3013
+  # pip caching is disabled globally via the PIP_NO_CACHE_DIR env var in the
+  # builder stage, which hadolint does not recognize as the --no-cache-dir flag.
+  - DL3042

@@ -40,13 +40,13 @@ def load_obj(req_path):
         with open(req_path, "rb") as f:
             raw = f.read()
     except OSError as e:
-        return None, 10, "cannot read request: %s" % e
+        return None, 10, f"cannot read request: {e}"
     if not raw.strip():
         return None, 10, "empty request file"
     try:
         obj = json.loads(raw.decode("utf-8"))
     except Exception as e:
-        return None, 10, "malformed JSON: %s" % e
+        return None, 10, f"malformed JSON: {e}"
     if not isinstance(obj, dict):
         return None, 10, "request is not a JSON object"
     return obj, 0, ""
@@ -64,13 +64,12 @@ def structural_ok(obj):
     if not isinstance(obj.get("code"), str):
         return False
     to = obj.get("timeout_seconds")
-    if isinstance(to, bool) or not isinstance(to, int):
-        return False
-    return True
+    # bool is a subclass of int, so reject it explicitly.
+    return isinstance(to, int) and not isinstance(to, bool)
 
 
 def check_mode(req_path):
-    obj, code, msg = load_obj(req_path)
+    obj, _code, _msg = load_obj(req_path)
     if obj is None or not structural_ok(obj):
         sys.exit(1)
     sys.exit(0)
@@ -97,7 +96,7 @@ def stage_mode(req_path, wd):
 
     lang = obj.get("language")
     if not isinstance(lang, str) or lang not in LANG_MAP:
-        die(12, "unsupported language: %r (expected 'python' or 'bash')" % (lang,))
+        die(12, f"unsupported language: {lang!r} (expected 'python' or 'bash')")
 
     code_str = obj.get("code")
     if not isinstance(code_str, str):
@@ -121,7 +120,7 @@ def stage_mode(req_path, wd):
         with open(os.path.join(wd, "code"), "w", encoding="utf-8") as f:
             f.write(code_str)
     except OSError as e:
-        die(11, "cannot stage request: %s" % e)
+        die(11, f"cannot stage request: {e}")
 
     sys.exit(0)
 

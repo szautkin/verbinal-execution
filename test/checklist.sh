@@ -10,6 +10,11 @@
 #       images.canfar.net/<project>/verbinal-compute:dev /src/test/checklist.sh
 # or on any Linux host with bash + python3.
 
+# The `cond && ok "..." || bad "..."` assertion idiom is used throughout. `ok`
+# always succeeds, so the `|| bad` branch only runs when the condition fails --
+# the SC2015 "not if-then-else" caveat does not apply here. Silence it file-wide.
+# shellcheck disable=SC2015
+
 set -u
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -179,6 +184,7 @@ drop t8 '{"id":"t8","language":"python","code":"print(8)","timeout_seconds":30}'
 wait_out t8 && ok "loop continues after malformed request" || bad "loop survives malformed"
 
 # --- Idempotency: pre-existing result is not re-run ------------------------
+# shellcheck disable=SC2034  # captured for readability of the idempotency window; unread by design
 mtime_before=$(date +%s)
 sleep 1
 # t1 already has a result; re-drop the same id, it must NOT re-run.

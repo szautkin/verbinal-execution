@@ -36,6 +36,30 @@ CI (`.github/workflows/ci.yml`) runs exactly this on every push/PR. Please make
 sure all three suites pass before opening a PR, and add a check to the relevant
 suite for any behavior you change.
 
+## Linting & formatting
+
+CI also runs a `lint` job. You can run the same checks locally:
+
+```bash
+ruff check                       # python lint  (config: pyproject.toml)
+ruff format --check               # python formatting
+shellcheck -s bash opt/verbinal/watcher.sh skaha/startup.sh test/*.sh
+hadolint Dockerfile               # uses .hadolint.yaml
+```
+
+The easiest way is [`pre-commit`](https://pre-commit.com), which wires all of
+the above (plus actionlint and whitespace fixers) into a git hook:
+
+```bash
+pip install pre-commit
+pre-commit install                # run automatically on every commit
+pre-commit run --all-files        # or run on demand
+```
+
+`ruff format` and `ruff check --fix` will fix most Python issues for you. For the
+shell scripts, prefer a narrowly-scoped `# shellcheck disable=SCxxxx` with a
+reason over restructuring security-sensitive code.
+
 ## Conventions
 
 - **Never break the watcher loop.** All errors must be caught and turned into a
