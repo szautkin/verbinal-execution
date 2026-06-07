@@ -1,0 +1,41 @@
+# Python packages available to agent-supplied code, mirroring the star-ai-images
+# science stack -- but on a lean python:3.11-slim base instead of the multi-GB
+# astroml base. Installed into a venv in a builder stage and copied into the
+# slim runtime (see Dockerfile), so the build toolchain never ships.
+#
+# NOTE: `jupyter` from the star-ai list is intentionally omitted -- it's a
+# notebook server (pulls jupyterlab/notebook/tornado/...) with no use in a
+# headless file-drop executor and is a major size contributor. `ipython` is
+# kept (small, occasionally imported by snippets). Re-add `jupyter` here if you
+# ever need it.
+
+# CANFAR Platform
+canfar
+
+# Core Astronomy Packages
+astropy>=6.0.0
+numpy>=1.24.0
+scipy>=1.11.0
+matplotlib>=3.8.0
+pandas>=2.1.0
+
+# Astronomy-specific Tools
+astroquery>=0.4.7
+photutils>=1.10.0
+specutils>=1.13.0
+reproject>=0.13.0
+regions>=0.9.0
+
+# FITS and Data Handling
+fitsio>=1.2.0
+h5py>=3.10.0
+
+# Machine Learning & Analysis
+scikit-learn>=1.3.0
+scikit-image>=0.22.0
+
+# Utilities
+ipython>=8.18.0
+tqdm>=4.66.0
+pyyaml>=6.0.0
+requests>=2.31.0

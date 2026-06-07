@@ -1,0 +1,24 @@
+# Reference packages kept locally for context only -- separate upstream repos,
+# not part of verbinal-execution. (Remove these lines if you relocate them.)
+/globus-cadc/
+/star-ai-images/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Build / test artifacts
+*.log
+/build/

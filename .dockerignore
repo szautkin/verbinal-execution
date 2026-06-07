@@ -1,0 +1,21 @@
+# Keep the build context tiny and exclude everything not baked into the image.
+
+# Reference packages (separate repos, not part of this image)
+globus-cadc/
+star-ai-images/
+
+# Repo meta, docs, and tests (not needed at runtime)
+.git/
+.github/
+.gitignore
+.dockerignore
+*.md
+LICENSE
+Makefile
+test/
+
+# Python / OS junk
+__pycache__/
+*.pyc
+.DS_Store
+*.log
