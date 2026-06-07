@@ -27,7 +27,7 @@ reproject>=0.13.0
 regions>=0.9.0
 
 # FITS and Data Handling
-fitsio>=1.2.0
+fitsio>=1.3.0
 h5py>=3.10.0
 
 # Machine Learning & Analysis
