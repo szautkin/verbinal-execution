@@ -24,7 +24,7 @@ astroquery>=0.4.7
 photutils>=1.10.0
 specutils>=1.13.0
 reproject>=0.13.0
-regions>=0.9.0
+regions>=0.11
 
 # FITS and Data Handling
 fitsio>=1.2.0
